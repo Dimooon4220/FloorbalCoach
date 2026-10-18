@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Florball Coach</title>
+  <desc id="desc">A green shield with a lime ball and a white floorball stick.</desc>
+  <rect width="512" height="512" rx="112" fill="#10251D"/>
+  <path d="M256 53 403 108v145c0 99-61 166-147 207-86-41-147-108-147-207V108z" fill="#1B6B4B" stroke="#D6F36A" stroke-width="10" stroke-linejoin="round"/>
+  <path d="m168 348 157-177" fill="none" stroke="#FFFFFF" stroke-width="24" stroke-linecap="round"/>
+  <path d="m168 348-25 24c-9 9-23 12-35 6l-17-9" fill="none" stroke="#FFFFFF" stroke-width="23" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="338" cy="163" r="34" fill="#D6F36A"/>
+  <circle cx="329" cy="151" r="4.5" fill="#10251D"/>
+  <circle cx="348" cy="158" r="4.5" fill="#10251D"/>
+  <circle cx="334" cy="174" r="4.5" fill="#10251D"/>
+</svg>
