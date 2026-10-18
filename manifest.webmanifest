@@ -1,0 +1,16 @@
+{
+  "name": "Флорбол Тренер",
+  "short_name": "Флорбол",
+  "description": "Нормативи, план тренувань, таймери та статистика флорбольного гравця.",
+  "lang": "uk",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#10251d",
+  "theme_color": "#10251d",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
