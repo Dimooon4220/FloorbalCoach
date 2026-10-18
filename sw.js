@@ -1,4 +1,4 @@
-const CACHE_NAME = "florball-coach-v1";
+const CACHE_NAME = "florball-coach-v2";
 const APP_FILES = [
   "./",
   "./index.html",

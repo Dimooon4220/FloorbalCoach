@@ -264,7 +264,7 @@
         <form id="norm-form"><input type="hidden" name="id" value="${esc(norm.id || "")}"><div class="field"><label for="norm-title">Назва</label><input id="norm-title" name="title" maxlength="48" value="${esc(norm.title)}" required></div>
         <div class="field"><label for="norm-description">Опис вправи</label><textarea id="norm-description" name="description" maxlength="140">${esc(norm.description)}</textarea></div>
         <div class="form-row"><div class="field"><label for="norm-target">Ціль</label><input id="norm-target" name="target" type="number" min="1" max="99999" value="${esc(norm.target)}" required></div><div class="field"><label for="norm-unit">Одиниця</label><input id="norm-unit" name="unit" maxlength="20" value="${esc(norm.unit)}" required></div></div>
-        <div class="form-error" id="norm-error" role="alert"></div><div class="modal-actions"><button class="secondary-button" type="button" data-action="close-modal">Скасувати</button><button class="primary-button" type="submit">${modal.norm ? "Зберегти" : "Додати"}</button></div></form></section></div>`;
+        <div class="form-error" id="norm-error" role="alert"></div><div class="modal-actions"><button class="secondary-button" type="button" data-action="close-modal">Скасувати</button><button class="primary-button" type="button" data-action="save-norm">${modal.norm ? "Зберегти" : "Додати"}</button></div></form></section></div>`;
       return;
     }
     if (modal.type === "details") {
@@ -449,6 +449,7 @@
     if (action === "backdrop-close" && event.target === button) { setModal(null); return; }
     if (action === "close-modal") { setModal(null); return; }
     if (action === "add-norm") { openNormForm(); return; }
+    if (action === "save-norm") { saveNormForm(document.getElementById("norm-form")); return; }
     if (action === "details") { setModal({ type: "details", id: button.dataset.id }); return; }
     if (action === "edit-norm") { const norm = state.norms.find(item => item.id === button.dataset.id); setModal(null); openNormForm(norm); return; }
     if (action === "quick-record") {
@@ -494,18 +495,7 @@
     }
     if (event.target.id === "norm-form") {
       event.preventDefault();
-      const form = new FormData(event.target);
-      const title = String(form.get("title") || "").trim();
-      const target = Number(form.get("target"));
-      const error = document.getElementById("norm-error");
-      if (!title || !Number.isInteger(target) || target < 1) { error.textContent = "Введи назву й ціль, що більша за нуль."; return; }
-      const existing = state.norms.find(norm => norm.id === form.get("id"));
-      if (existing) {
-        Object.assign(existing, { title, description: String(form.get("description") || "").trim(), target, unit: String(form.get("unit") || "разів").trim() || "разів" });
-      } else {
-        state.norms.push({ id: crypto.randomUUID ? crypto.randomUUID() : `norm-${Date.now()}`, title, description: String(form.get("description") || "").trim(), target, unit: String(form.get("unit") || "разів").trim() || "разів", done: 0, reminderEnabled: false, reminderHour: 18, reminderMinute: 0 });
-      }
-      saveState(); setModal(null); render(); showToast(existing ? "Норматив оновлено" : "Норматив додано"); return;
+      saveNormForm(event.target); return;
     }
     if (event.target.id === "record-form") {
       event.preventDefault();
@@ -519,6 +509,27 @@
       if (!name) return;
       state.profile.name = name; saveState(); render(); showToast("Ім’я змінено");
     }
+  }
+
+  function saveNormForm(formElement) {
+    if (!formElement) return;
+    const form = new FormData(formElement);
+    const title = String(form.get("title") || "").trim();
+    const target = Number(form.get("target"));
+    const error = document.getElementById("norm-error");
+    if (!title || !Number.isInteger(target) || target < 1) {
+      if (error) error.textContent = "Введи назву й ціль, що більша за нуль.";
+      return;
+    }
+    const id = String(form.get("id") || "");
+    const existing = id ? state.norms.find(norm => norm.id === id) : null;
+    const details = { title, description: String(form.get("description") || "").trim(), target, unit: String(form.get("unit") || "разів").trim() || "разів" };
+    if (existing) Object.assign(existing, details);
+    else state.norms.push({ id: `norm-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, ...details, done: 0, reminderEnabled: false, reminderHour: 18, reminderMinute: 0 });
+    saveState();
+    setModal(null);
+    render();
+    showToast(existing ? "Норматив оновлено" : "Норматив додано");
   }
 
   app.addEventListener("click", handleClick);
